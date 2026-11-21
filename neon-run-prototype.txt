@@ -1,0 +1,17 @@
+Create a single-page app in a single HTML file with the following requirements
+- Name Neon Run 2087
+- Goal Create a prototype for a car racing game, with the theme of being played on a Commodore 64
+- The games is set in the year 2087
+- The software will simulate software written for a Commodore 64 in 1987
+- You control a car driving to a city
+- The perspective is a view from behind and above the car. Pole Position is an example of the point of view.
+- The car will be driving on a 3 lane freeway, all traffic going in the same direction as the player
+- The game will be set at night time. The skies will be black, the ground will be black
+- For the UI, a city skyline is seen from a distance.
+- The road will be a black three-lane highway, with neon green lane markers
+- The arrow buttons are the controls. Up arrow accelerates, down arrow brakes, left and right steer the car in that direction
+- The road goes straight. It will turn at times, sometimes left, sometime right
+- The are other cars on the road. Cars will stay in a lane
+- Cars will never pass the player from behind. The player will encounter cars as it drives faster
+
+

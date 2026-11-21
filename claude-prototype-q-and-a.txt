@@ -1,0 +1,56 @@
+From Claude:
+
+Authenticity of the C64 look
+
+How strict should the C64 simulation be? Options: (a) a faithful 320x200 canvas with the 16-color C64 palette, scaled up with crisp pixels; (b) the same plus C64 quirks like 8x8 character cells, limited colors per cell, and sprite-style limits; (c) just a retro look. Your “black sky, black ground, neon green” theme sits a bit against the C64 palette, which has no true neon green. The nearest are light green and green, so is that acceptable?
+Should there be a C64 boot or loading screen (LOAD "NEON RUN 2087",8,1, READY., the blue border)? Or go straight to the game?
+Should the blue-and-light-blue border/background of the C64 frame the game, or should the screen fill the page?
+Sound: should I include SID-style audio (engine drone, crash noise, a chiptune title tune) via Web Audio, or leave it silent for now? You have done audio before, so I’ll include a mute button if you want sound.
+
+Perspective and rendering
+5. Pole Position used a pseudo-3D road with scanline-based perspective and scaling sprites. Is that the approach you want, with the road narrowing toward the horizon and cars scaling as they approach?
+6. For the car and traffic sprites, should I draw simple pixel-art cars in code (no image files), consistent with your single-file approach? Should the player’s car look different from traffic (color, shape)?
+7. How should the road curves look? Pole Position-style, the road bends left or right, the skyline shifts, and the horizon moves. Is that right?
+
+Gameplay
+8. “You control a car driving to a city.” Is there a finish line when you reach the city, or is it endless for the prototype? If there is an end, how long should the trip take?
+9. Steering: is it lane-based (snap to one of three lanes) or free lateral movement across the road? Your description mixes both (“left and right steer,” “cars stay in a lane”). Free steering is more Pole Position-like.
+10. What happens on a collision? Options: crash and respawn, slow to a stop, explosion and game over, or bounce off. What about driving off the road, if free steering allows it?
+11. Is there a speed limit or top speed, and should a speedometer appear?
+12. Traffic: “Cars will never pass the player from behind,” so all traffic is slower than the player’s maximum speed and the player always overtakes. Should traffic have different speeds (slow, medium)? Can the player go slower than traffic, and if so, should that make cars appear to drift backward, or should I let the player coast to a stop without being hit from behind?
+13. Should there be a score, time limit, lives, or checkpoints? Or is that out of scope for the prototype?
+
+Visuals
+14. City skyline: static, or growing larger as you approach? Should it have blinking window lights or a distant glow? Does it need to be on the horizon only, or visible during curves?
+15. Should I add the sci-fi 2087 touch beyond the theme, like hover-style cars, glowing tail lights, or a HUD with futuristic wording, or keep everything plausible for 1987 hardware?
+
+Controls and platform
+16. Keyboard only for the prototype, or should I add touch controls for tablets (as in Crossroads)?
+17. Should the title display “NEON RUN 2087” on a start screen with “PRESS FIRE” or “PRESS SPACE”, or does the game begin immediately?
+18. Any standard footer you want, such as the MIT license link you use on your other games?
+
+Format
+19. Since this is a first build, I’ll deliver a complete HTML file. Later changes I’ll give you as targeted diffs with exact placement instructions, per your workflow. Is that correct?
+
+
+My answers:
+1) For now, let's go for option A. Have it be like a 320x200 screen, and scale up in a manageable way.
+2) For this prototype, you should go straight to the game. Independently from this project, I have a separate project that creates a C64 loading screen, does "LOAD *, 8, 1"... the after that, it shows a hacker screen, like you saw at a lot of game in the 80's. Later, I want to integrate that intro into this game. For now, it can go straight to the game.
+3) The game should fill the display of the game. It has been many years: I don't think that border needs to be there in games. Tell me: am I wrong?
+4) Leave it silent for now. 
+5) Yes, that is a good description, certainly to try for a prototype. I will say that this Neon Run prototype is set at night with 3 lanes, but the steering effect and point-of-view you describe is good.
+6) No image files. When I hear "simple pixel-art"... that could mean a rectangle. I don't want it to look too simple. I would like it to look like car from a good game in 1987.
+7) Yes. To be clear, when we talk about "skyline" those are the buildings in a city skyline.
+8) For a prototype, let's make no end to the road (for now), but the level ends after one minute. I would say let's keep it simple for a prototype.
+9) Free lateral movement. Other cars will drive in lanes. The player can be anywhere on the road. 
+10) Crash and respawn.
+11) There should be a top speed. For now, pick that top speed. We will adjust after this prototpye.
+12) This is challenging. Traffic can have different speeds. If the player goes slower than traffic, it will look like the traffic drives away. Cars should never appear from behind. When the player passes a car and leaves the screen, from a logic standpoint, that car will be removed - it will not come back and crash into the player.
+13) It is out of scope for the prototype
+14) Static. Consider it fairly far away. When the road turns and the player turns, the city scrolls side to side. The image is static: no variation needed.
+15) Keep it plausible for 1987. Here's one way to look like it. It can look like a car from 2007 and it would look "far in the future." You don't need to make it look exactly like a 1987 car. Make it look like sports cars.
+16) Keyboard only
+17) Have it PRESS ENTER to start
+18) You don't need to do that for the prototype
+19) For initial versions, it might be more totally new prototypes. I will tell you when to switch to the diff-based mode.
+

@@ -1,0 +1,42 @@
+Version 01.01	35 minutes dev	2 minutes CPU	3 minutes test		40 minutes
+
+This time, I wanted to make a game that looked like it was being played on a
+Commodore 64 computer. I asked ChatGPT, Claude, and Gemini for ideas. I like
+one that ChatGPT had the best: 
+"You're a courier racing through a futuristic city to deliver a mysterious 
+data capsule before the city security forces catch you."
+I liked the theme. It seemed the most inline with a C64 game that would be
+fun and feasible. I worked with ChatGPT on a prototype... and it did not go
+well. Generally UI was good. Playing had many errors around it. I took the
+same game model, and asked Claude to create a prototype. I shouldn't be
+surprised with Claude - but it did a much better than expected prototype.
+Don't get me wrong: there are defects for sure. But for a Proof of Concept?
+Perfect.
+I've documented some basic next steps to proceed from here.
+
+
+
+TODO clear defect: after the game, with the car still, the road still
+	turns. If I stop during the game, it will do the same. Fundamentally, 
+	there is something odd about how those turns are managed.
+TODO the model for distance seen is a bit too far off. You can see players
+	on the horizon for a long time, then they emerge. That horizon...
+	needs less distance? I need to clear way to convey this.
+TODO related to that, when they emerge, they come in FAST. Need something
+	a bit smoother.
+TODO this game allows you to run off the road. It does slow you down which is
+	a nice touch. Maybe crash when they are passed more than half way off.
+	This requires thought.
+TODO the graphics on the lanes are nice. They end a little early, as the
+	lane goes to a point.
+TODO this will resize to any dimensions. Maybe a max?
+TODO maybe the turns should be a bit more responsive? It can be a bit too
+	difficult to steer away from other cars
+TODO add levels into the game. What are the variables? Time to go a certain
+	distance? Frequency of turns and/or drivers?
+TODO initial level thought - you win after 6 levers completed. But it keeps
+	player forever
+TODO integrate with the C64 intro - loading the program and the hacker screen
+TODO add a "SID-style audio (engine drone, crash noise, a chiptune title tune)"
+TODO add the MIT license
+
