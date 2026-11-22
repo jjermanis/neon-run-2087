@@ -125,13 +125,23 @@ sk.width = W; sk.height = SKH;
 })();
 
 // Game state
-let state = 'title', speed = 0, px = 0, pos = 0, curve = 0, target = 0, curveT = 3,
+let state = 'title', speed = 0, px = 0, pos = 0, curve = 0, 
     skyOff = 0, time = RUN_TIME, cars = [], spawnT = 1, crashT = 0, invuln = 0;
 const keys = {};
 const CAR_COLS = ['P', 'Y', 'l', 'W', 'G', 'O'], TRUCK_COLS = ['M', 'S', 'l'];
 
+// Track: road bends are defined by distance traveled (pos), not by time.
+const EASE = 8;                                   // distance over which one bend blends into the next
+let seg = { start: 0, len: 30, bend: 0, prev: 0 };  // current track segment
+function newSeg(start, prevBend) {
+  if (prevBend === 0)                             // after a straight: make a bend
+    return { start, len: 30 + Math.random() * 30, prev: prevBend,
+             bend: (Math.random() < 0.5 ? -1 : 1) * (0.5 + Math.random() * 0.5) };
+  return { start, len: 25 + Math.random() * 30, prev: prevBend, bend: 0 };  // after a bend: straight
+}
+
 function start() {
-  state = 'play'; speed = 0; px = 0; pos = 0; curve = 0; target = 0; curveT = 3;
+  state = 'play'; speed = 0; px = 0; pos = 0; curve = 0; seg = { start: 0, len: 30, bend: 0, prev: 0 };
   time = RUN_TIME; cars = []; spawnT = 1; crashT = 0; invuln = 0;
 }
 
@@ -155,12 +165,9 @@ function update(dt) {
   px = Math.max(-1.7, Math.min(1.7, px));
   pos += speed * KD * dt;
 
-  curveT -= dt;
-  if (curveT <= 0) {
-    if (target === 0) { target = (Math.random() < 0.5 ? -1 : 1) * (0.5 + Math.random() * 0.5); curveT = 3 + Math.random() * 3; }
-    else { target = 0; curveT = 2.5 + Math.random() * 3; }
-  }
-  curve += (target - curve) * Math.min(1, dt * 1.2);
+  while (pos >= seg.start + seg.len) seg = newSeg(seg.start + seg.len, seg.bend);
+  const t = Math.min(1, (pos - seg.start) / EASE);
+  curve = seg.prev + (seg.bend - seg.prev) * (t * t * (3 - 2 * t));   // smoothstep blend
   skyOff -= curve * (speed / MAX) * 45 * dt;
   skyOff = ((skyOff % W) + W) % W;
 

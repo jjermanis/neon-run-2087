@@ -15,10 +15,19 @@ Perfect.
 I've documented some basic next steps to proceed from here.
 
 
+Version 01.02	18 minutes dev	1 minute CPU	1 minute test		1 hour
 
-TODO clear defect: after the game, with the car still, the road still
-	turns. If I stop during the game, it will do the same. Fundamentally, 
-	there is something odd about how those turns are managed.
+In my initial testing, I only saw one significant flaw. When you turn in the
+game, the road visually turns to the left and right. When the game is over,
+and the car stops... you'd still see the road move. It would also happen in 
+game if you got the speed down to 0: the road would be still going forward
+but would move turn left and right.
+I asked Claude to resolve. It was basing road turns passed on time. It
+switched to using distance. This was fairly east to resolve.
+
+
+
+TODO the lanes feel narrow. Get them to be a bit wider.
 TODO the model for distance seen is a bit too far off. You can see players
 	on the horizon for a long time, then they emerge. That horizon...
 	needs less distance? I need to clear way to convey this.
@@ -38,5 +47,6 @@ TODO initial level thought - you win after 6 levers completed. But it keeps
 	player forever
 TODO integrate with the C64 intro - loading the program and the hacker screen
 TODO add a "SID-style audio (engine drone, crash noise, a chiptune title tune)"
+TODO game needs an icon
 TODO add the MIT license
 
