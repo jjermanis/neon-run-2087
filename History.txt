@@ -26,8 +26,18 @@ I asked Claude to resolve. It was basing road turns passed on time. It
 switched to using distance. This was fairly east to resolve.
 
 
+Version 01.03	9 minutes dev	0 minutes CPU	1 minute test		1 hour 10
 
-TODO the lanes feel narrow. Get them to be a bit wider.
+Playing, I thought the lanes were a little thin. I checked with Claude: cars
+take up 67% (aka 2/3rds) of a lane. Standard roads is 50%, and narrow roads
+are 60%. I switched to narrow roads for this: more reasonable, for UI and
+playability.
+Claude did a balanced solution: the road is a little wider, and the car is a
+little more narrow. A small change, yet light impact visually, but plays a
+bit easier.
+
+
+
 TODO the model for distance seen is a bit too far off. You can see players
 	on the horizon for a long time, then they emerge. That horizon...
 	needs less distance? I need to clear way to convey this.
@@ -47,6 +57,7 @@ TODO initial level thought - you win after 6 levers completed. But it keeps
 	player forever
 TODO integrate with the C64 intro - loading the program and the hacker screen
 TODO add a "SID-style audio (engine drone, crash noise, a chiptune title tune)"
+TODO maybe a song based on End Titles, in Soundtrack from Blade Runner
 TODO game needs an icon
 TODO add the MIT license
 

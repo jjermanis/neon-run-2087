@@ -27,6 +27,9 @@ const MAX = 200;        // top speed
 const KD = 0.05;        // world-distance units per (speed unit * second)
 const PD = 40 / 110;    // player's distance from camera (row 110)
 const RUN_TIME = 60;    // seconds per level
+const ROAD_HW = 120;    // half road width in px at the bottom row (was 110)
+const CAR_W = 0.4;      // car width in half-road units; lane is 0.667, so 0.4 / 0.667 = 0.6
+const PLAYER_W = CAR_W * ROAD_HW * 110 / 120;  // player car width in px (row 110) = 44
 
 // Integer scaling to fill the window
 function fit() {
@@ -193,7 +196,7 @@ function update(dt) {
   if (active && invuln <= 0) {
     for (const c of cars) {
       const lo = Math.min(c.od, c.d), hi = Math.max(c.od, c.d);
-      if (hi >= 0.30 && lo <= 0.46 && Math.abs((c.lane - 1) * 0.667 - px) < 0.45) { crashT = 1.5; speed = 0; break; }
+      if (hi >= 0.30 && lo <= 0.46 && Math.abs((c.lane - 1) * 0.667 - px) < CAR_W) { crashT = 1.5; speed = 0; break; }
     }
   }
   if (invuln > 0) invuln -= dt;
@@ -206,21 +209,21 @@ function update(dt) {
 function drawCar(c) {
   const r = 40 / c.d;
   if (r > ROWS + 40) return;
-  const s = r / 120, hw = 110 * s;
+  const s = r / 120, hw = ROAD_HW * s;
   const x = 160 + curve * 90 * (1 - s) * (1 - s) + ((c.lane - 1) * 0.667 - px) * hw;
-  sprite(c.truck ? TRUCK : CAR, x, HZ + r, 0.45 * hw, c.truck ? 2.3 : 1, { C: c.col, M: c.col });
+  sprite(c.truck ? TRUCK : CAR, x, HZ + r, CAR_W * hw, c.truck ? 2.3 : 1, { C: c.col, M: c.col });
 }
 
 function drawPlayer() {
   if (crashT > 0) {
-    if (crashT > 1.1) sprite(CAR, 160, 190, 45, 1, {});
+    if (crashT > 1.1) sprite(CAR, 160, 190, PLAYER_W, 1, {});
     const fx = 'YORWr';
     for (let i = 0; i < 24; i++) {
       ctx.fillStyle = COL[fx[Math.floor(Math.random() * fx.length)]];
       const k = 2 + Math.floor(Math.random() * 5);
       ctx.fillRect(Math.round(160 + (Math.random() - 0.5) * 50), Math.round(190 - Math.random() * 30), k, k);
     }
-  } else if (invuln <= 0 || (Math.floor(invuln * 10) & 1)) sprite(CAR, 160, 190, 45, 1, {});
+  } else if (invuln <= 0 || (Math.floor(invuln * 10) & 1)) sprite(CAR, 160, 190, PLAYER_W, 1, {});
 }
 
 function render() {
@@ -229,7 +232,7 @@ function render() {
   ctx.drawImage(sk, o, HZ - SKH); ctx.drawImage(sk, o - W, HZ - SKH);
 
   for (let r = 1; r <= ROWS; r++) {
-    const y = HZ + r, s = r / 120, hw = 110 * s, d = 40 / r;
+    const y = HZ + r, s = r / 120, hw = ROAD_HW * s, d = 40 / r;
     const cx = 160 + curve * 90 * (1 - s) * (1 - s) - px * hw;
     const mw = Math.max(1, Math.round(hw * 0.03));
     ctx.fillStyle = COL.L;
