@@ -30,6 +30,8 @@ const RUN_TIME = 60;    // seconds per level
 const ROAD_HW = 120;    // half road width in px at the bottom row (was 110)
 const CAR_W = 0.4;      // car width in half-road units; lane is 0.667, so 0.4 / 0.667 = 0.6
 const PLAYER_W = CAR_W * ROAD_HW * 110 / 120;  // player car width in px (row 110) = 44
+const START_ROW = 4;    // first visible road row below the horizon; cars first appear here
+const START_D = 40 / START_ROW;    // distance at that row (10 for row 4)
 
 // Integer scaling to fill the window
 function fit() {
@@ -180,17 +182,17 @@ function update(dt) {
     if (spawnT <= 0) {
       spawnT = 0.5 + Math.random() * 1.1;
       const lane = Math.floor(Math.random() * 3), sp = 45 + Math.random() * 80;
-      if (sp < speed - 5 && cars.length < 12 && !cars.some(c => c.lane === lane && c.d > 28)) {
+      if (sp < speed - 5 && cars.length < 12 && !cars.some(c => c.lane === lane && c.d > START_D * 0.7)) {
         const truck = Math.random() < 0.2;
         const cols = truck ? TRUCK_COLS : CAR_COLS;
-        cars.push({ lane, d: 38, od: 38, sp, truck, col: cols[Math.floor(Math.random() * cols.length)] });
+        cars.push({ lane, d: START_D, od: START_D, sp, truck, col: cols[Math.floor(Math.random() * cols.length)] });
       }
     }
   }
   for (const c of cars) { c.od = c.d; c.d += (c.sp - speed) * KD * dt; }
   for (const a of cars) for (const b of cars)
-    if (a !== b && a.lane === b.lane && b.d > a.d && b.d - a.d < 2.5 && a.sp > b.sp) a.sp = b.sp;
-  cars = cars.filter(c => c.d > 0.2 && c.d < 45);
+    if (a !== b && a.lane === b.lane && b.d > a.d && b.d - a.d < 1.5 && a.sp > b.sp) a.sp = b.sp;
+  cars = cars.filter(c => c.d > 0.2 && c.d <= START_D);
 
   // Collisions
   if (active && invuln <= 0) {
@@ -229,9 +231,9 @@ function drawPlayer() {
 function render() {
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
   const o = Math.round(skyOff);
-  ctx.drawImage(sk, o, HZ - SKH); ctx.drawImage(sk, o - W, HZ - SKH);
+  ctx.drawImage(sk, o, HZ + START_ROW - SKH); ctx.drawImage(sk, o - W, HZ + START_ROW - SKH);
 
-  for (let r = 1; r <= ROWS; r++) {
+  for (let r = START_ROW; r <= ROWS; r++) {
     const y = HZ + r, s = r / 120, hw = ROAD_HW * s, d = 40 / r;
     const cx = 160 + curve * 90 * (1 - s) * (1 - s) - px * hw;
     const mw = Math.max(1, Math.round(hw * 0.03));

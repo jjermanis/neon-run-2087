@@ -37,12 +37,18 @@ little more narrow. A small change, yet light impact visually, but plays a
 bit easier.
 
 
+Version 01.04	16 minutes dev	1 minute CPU	3 minutes test		1 hour 30
 
-TODO the model for distance seen is a bit too far off. You can see players
-	on the horizon for a long time, then they emerge. That horizon...
-	needs less distance? I need to clear way to convey this.
-TODO related to that, when they emerge, they come in FAST. Need something
-	a bit smoother.
+In my initial test, I thought the road looked to long. It wasn't necessarily
+unrealistic, but it took away some of the challenge of the game. To fix, I 
+asked Claude to drop the start by 4 pixels. This had a fairly substantial
+effect, that I like. It gives you some warning, but not much.
+To finish the move, I lowered the city by 4 pixels to line up with the road.
+I originally thought they came in too fast, accelerating. With a shorter 
+visibility road, the speeds look good. No change needed for that.
+
+
+
 TODO this game allows you to run off the road. It does slow you down which is
 	a nice touch. Maybe crash when they are passed more than half way off.
 	This requires thought.
