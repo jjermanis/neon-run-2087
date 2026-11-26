@@ -166,7 +166,7 @@ function update(dt) {
   if (Math.abs(px) > 1.12 && speed > 80) speed -= 140 * dt;   // off-road drag
   speed = Math.max(0, Math.min(MAX, speed));
 
-  px -= curve * (speed / MAX) * 0.9 * dt;                      // curve pushes player outward
+  px -= curve * (speed / MAX) * (speed / MAX) * 0.9 * dt;                      // curve pushes player outward
   px = Math.max(-1.7, Math.min(1.7, px));
   pos += speed * KD * dt;
 

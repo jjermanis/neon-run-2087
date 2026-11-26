@@ -48,22 +48,36 @@ I originally thought they came in too fast, accelerating. With a shorter
 visibility road, the speeds look good. No change needed for that.
 
 
+Version 01.05	11 minutes dev	1 minute CPU	3 minutes test		1 hour 45
 
-TODO this game allows you to run off the road. It does slow you down which is
-	a nice touch. Maybe crash when they are passed more than half way off.
-	This requires thought.
-TODO the graphics on the lanes are nice. They end a little early, as the
-	lane goes to a point.
-TODO this will resize to any dimensions. Maybe a max?
-TODO maybe the turns should be a bit more responsive? It can be a bit too
-	difficult to steer away from other cars
+When the car is on a road that's turning, it takes more time to change
+lanes if you are moving to the inside. That makes sense in real life, and
+it's the game. But in real life, the fast you go, the more difficult it 
+is to turn into curve. In the game, it is more difficult to turn into the
+corner, whether you are doing 20 or 200.
+The original code had the stress turning into curve done in a linear way.
+Now, it's based on the square of the speed. The fast the driver, the
+more difficult to turn into the code. It is a somewhat subtle change, but
+comes across better. This was a one-line change of code.
+
+
+
 TODO add levels into the game. What are the variables? Time to go a certain
 	distance? Frequency of turns and/or drivers?
 TODO initial level thought - you win after 6 levers completed. But it keeps
 	player forever
+TODO the graphics on the lanes are nice. They end a little early, as the
+	lane goes to a point.
+TODO maybe the turns should be a bit more responsive? It can be a bit too
+	difficult to steer away from other cars. There was an earlier
+	adjustment, depending on speed. This should be a bit fast in general,
+	maybe 10-20%.
+TODO this will resize to any dimensions. Maybe a max?
 TODO integrate with the C64 intro - loading the program and the hacker screen
 TODO add a "SID-style audio (engine drone, crash noise, a chiptune title tune)"
 TODO maybe a song based on End Titles, in Soundtrack from Blade Runner
 TODO game needs an icon
 TODO add the MIT license
-
+TODO this game allows you to run off the road. It does slow you down which is
+	a nice touch. Maybe crash when they are passed more than half way off.
+	This requires thought.
