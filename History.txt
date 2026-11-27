@@ -61,11 +61,23 @@ more difficult to turn into the code. It is a somewhat subtle change, but
 comes across better. This was a one-line change of code.
 
 
+Version 01.06	32 minutes dev	1 minute CPU	2 minutes test		2 hours 20
 
-TODO add levels into the game. What are the variables? Time to go a certain
-	distance? Frequency of turns and/or drivers?
+This project started specifically as a proof of concept. Now is the time to 
+transition to a game. Soon, this will translate to a game with different 
+levels. To start, I wanted several parameters to be configurable per level: 
+how long the level is by time and distance, car frequency, turn frequency, 
+and car speeds. This was added: all of these concepts existed, but moved 
+from constants to an array of lists.
+To help test to create levels, I had it creating a testing version that will
+tell me the distance played for a level. I will based levels on times I play.
+
+
+
 TODO initial level thought - you win after 6 levers completed. But it keeps
 	player forever
+TODO ideas for more configurable level setttings. Degree to which the road
+	turns. Duration before the first turn (this is currenty hard-coded)
 TODO the graphics on the lanes are nice. They end a little early, as the
 	lane goes to a point.
 TODO maybe the turns should be a bit more responsive? It can be a bit too

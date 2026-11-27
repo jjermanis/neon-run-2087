@@ -26,7 +26,22 @@ const COL = {K:'#000000',W:'#ffffff',R:'#68372b',C:'#70a4b2',P:'#6f3d86',G:'#588
 const MAX = 200;        // top speed
 const KD = 0.05;        // world-distance units per (speed unit * second)
 const PD = 40 / 110;    // player's distance from camera (row 110)
-const RUN_TIME = 60;    // seconds per level
+// Level settings. Each level is one entry in LEVELS; levelIndex says which one is active.
+const LEVELS = [
+  { time: 60, distance: 1000,           // seconds allowed, distance to cover
+    spawnMin: 0.5, spawnMax: 1.6,       // wait between car spawn attempts (seconds)
+    bendMin: 30, bendMax: 60,           // bend length range (distance units)
+    straightMin: 25, straightMax: 55,   // straight length range (distance units)
+    carSpeedMin: 45, carSpeedMax: 125 },  // other cars' speed range
+  { time: 60, distance: 1000,
+    spawnMin: 0.5, spawnMax: 1.6,
+    bendMin: 30, bendMax: 60,
+    straightMin: 25, straightMax: 55,
+    carSpeedMin: 45, carSpeedMax: 125 }
+];
+let levelIndex = 0;                 // which level is being played (0 = first)
+let level = LEVELS[levelIndex];     // settings of the current level
+const SHOW_POS = true;              // show distance traveled (pos) on the end-of-level screen
 const ROAD_HW = 120;    // half road width in px at the bottom row (was 110)
 const CAR_W = 0.4;      // car width in half-road units; lane is 0.667, so 0.4 / 0.667 = 0.6
 const PLAYER_W = CAR_W * ROAD_HW * 110 / 120;  // player car width in px (row 110) = 44
@@ -131,8 +146,9 @@ sk.width = W; sk.height = SKH;
 
 // Game state
 let state = 'title', speed = 0, px = 0, pos = 0, curve = 0, 
-    skyOff = 0, time = RUN_TIME, cars = [], spawnT = 1, crashT = 0, invuln = 0;
+    skyOff = 0, time = level.time, cars = [], spawnT = 1, crashT = 0, invuln = 0;
 const keys = {};
+let endPos = 0;                     // pos at the moment the time ran out
 const CAR_COLS = ['P', 'Y', 'l', 'W', 'G', 'O'], TRUCK_COLS = ['M', 'S', 'l'];
 
 // Track: road bends are defined by distance traveled (pos), not by time.
@@ -140,21 +156,21 @@ const EASE = 8;                                   // distance over which one ben
 let seg = { start: 0, len: 30, bend: 0, prev: 0 };  // current track segment
 function newSeg(start, prevBend) {
   if (prevBend === 0)                             // after a straight: make a bend
-    return { start, len: 30 + Math.random() * 30, prev: prevBend,
+    return { start, len: level.bendMin + Math.random() * (level.bendMax - level.bendMin), prev: prevBend,
              bend: (Math.random() < 0.5 ? -1 : 1) * (0.5 + Math.random() * 0.5) };
-  return { start, len: 25 + Math.random() * 30, prev: prevBend, bend: 0 };  // after a bend: straight
+  return { start, len: level.straightMin + Math.random() * (level.straightMax - level.straightMin), prev: prevBend, bend: 0 };  // after a bend: straightt
 }
 
 function start() {
   state = 'play'; speed = 0; px = 0; pos = 0; curve = 0; seg = { start: 0, len: 30, bend: 0, prev: 0 };
-  time = RUN_TIME; cars = []; spawnT = 1; crashT = 0; invuln = 0;
+  level = LEVELS[levelIndex]; time = level.time; cars = []; spawnT = 1; crashT = 0; invuln = 0;
 }
 
 function update(dt) {
   if (state === 'title') return;
   const play = state === 'play', active = play && crashT <= 0;
 
-  if (play) { time -= dt; if (time <= 0) { time = 0; state = 'over'; } }
+  if (play) { time -= dt; if (time <= 0) { time = 0; endPos = pos; state = 'over'; } }
 
   if (active) {
     if (keys.ArrowUp) speed += 55 * dt; else speed -= 12 * dt;
@@ -180,8 +196,8 @@ function update(dt) {
   if (play) {
     spawnT -= dt;
     if (spawnT <= 0) {
-      spawnT = 0.5 + Math.random() * 1.1;
-      const lane = Math.floor(Math.random() * 3), sp = 45 + Math.random() * 80;
+      spawnT = level.spawnMin + Math.random() * (level.spawnMax - level.spawnMin);
+      const lane = Math.floor(Math.random() * 3), sp = level.carSpeedMin + Math.random() * (level.carSpeedMax - level.carSpeedMin);
       if (sp < speed - 5 && cars.length < 12 && !cars.some(c => c.lane === lane && c.d > START_D * 0.7)) {
         const truck = Math.random() < 0.2;
         const cols = truck ? TRUCK_COLS : CAR_COLS;
@@ -271,6 +287,7 @@ function render() {
     if (crashT > 0) ctext('CRASH', 20, 'Y', 2);
     if (state === 'over') {
       ctext('TIME UP', 14, 'Y', 4);
+      if (SHOW_POS) ctext('DIST ' + Math.round(endPos), 92, 'Y', 2);
       if (Math.floor(performance.now() / 500) & 1) ctext('PRESS ENTER', 110, 'Y', 2);
     }
   }
